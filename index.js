@@ -31,12 +31,23 @@ async function run() {
         await client.connect()
 
         const behaviorsCollection = client.db("eubricsTodo").collection("behaviors");
+        const taskCollection = client.db("eubricsTodo").collection("tasks");
 
 
         app.get('/behaviors', async (req, res) => {
             const result = await behaviorsCollection.find({}).toArray()
             res.send(result);
         })
+
+        app.post('/addtask', async (req, res) => {
+            const task = req.body;
+            const result = await taskCollection.insertOne(task);
+            console.log(task)
+            res.send(result)
+
+        })
+
+
 
 
 
