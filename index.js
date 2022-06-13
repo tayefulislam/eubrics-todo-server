@@ -47,6 +47,15 @@ async function run() {
 
         })
 
+        // get task depend on email and behavoirid
+
+        app.get('/mytasks', async (req, res) => {
+            const query = { email: req.query.email, behaviorId: req.query.behaviorId }
+            const result = await taskCollection.find(query).toArray()
+            console.log(result)
+            res.send(result)
+        })
+
 
 
 
