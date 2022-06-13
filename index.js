@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 require('dotenv').config()
 const port = process.env.PORT || 5000;
@@ -55,6 +55,51 @@ async function run() {
             console.log(result)
             res.send(result)
         })
+
+        // get single task
+
+        app.get('/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+
+            const result = await taskCollection.findOne(query)
+
+            res.send(result)
+
+        })
+
+
+        app.post('/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const task = req.body.task;
+
+            console.log(id, task)
+
+            const filter = { _id: ObjectId(id) };
+
+            const updateDoc = {
+                $set: {
+                    task: task
+                },
+            };
+            const result = await taskCollection.updateOne(filter, updateDoc)
+
+            res.send(result)
+
+        })
+
+
+        app.post('/delete/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+
+            const result = await taskCollection.deleteOne(query);
+
+            res.send(result)
+
+        })
+
+
 
 
 
